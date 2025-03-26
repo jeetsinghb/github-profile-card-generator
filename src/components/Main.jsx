@@ -142,7 +142,7 @@ const Main = () => {
               disabled={loading || (error && true)}
               type="submit"
               className={`cursor-pointer mt-4 border-2 border-[#222222] text-[#222222] hover:bg-[#222222] hover:text-white px-2 py-3 transition ${
-                loading || (error && "!cursor-not-allowed opacity-70")
+                loading && "!cursor-not-allowed opacity-70"
               }`}
             >
               Generate
