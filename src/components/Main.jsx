@@ -132,14 +132,14 @@ const Main = () => {
               value={user}
               onChange={(e) => setUser(e.target.value.trim())}
               className={`border-b border-[#333333] text-center p-1 focus:outline-0 placeholder:text-[1rem] placeholder:opacity-80 ${
-                loading || (error && "!cursor-not-allowed opacity-70")
+                loading && "!cursor-not-allowed opacity-70"
               }`}
               placeholder="Enter github username"
               autoComplete="off"
               disabled={loading && true}
             />
             <button
-              disabled={loading || (error && true)}
+              disabled={loading && true}
               type="submit"
               className={`cursor-pointer mt-4 border-2 border-[#222222] text-[#222222] hover:bg-[#222222] hover:text-white px-2 py-3 transition ${
                 loading && "!cursor-not-allowed opacity-70"
