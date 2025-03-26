@@ -136,7 +136,7 @@ const Main = () => {
               }`}
               placeholder="Enter github username"
               autoComplete="off"
-              disabled={loading || (error && true)}
+              disabled={loading && true}
             />
             <button
               disabled={loading || (error && true)}
