@@ -5,6 +5,7 @@ import "react-loading-skeleton/dist/skeleton.css";
 import exportAsImage from "../utils/exportAsImage";
 import { DownloadIcon } from "../icons/DownloadIcon";
 import { ThemeContext } from "../App";
+import StarsIcon from "../icons/StarsIcon";
 
 const Main = () => {
   const { theme } = useContext(ThemeContext);
@@ -104,7 +105,7 @@ const Main = () => {
   }, [lastUser]);
 
   return (
-    <main className="py-12 max-w-[650px] mx-auto">
+    <main className="py-12 max-w-[660px] mx-auto">
       <div className="container px-4 mx-auto flex flex-col md:flex-row items-center gap-y-6">
         <div className="w-full px-4">
           <div
@@ -165,9 +166,12 @@ const Main = () => {
           </div>
         </div>
         <div className="w-full px-4">
+          <span className="block mx-auto label text-center mb-4">
+            Enter Username 👇
+          </span>
           <form
             onSubmit={handleSubmit}
-            className="flex flex-col max-w-[290px] mx-auto pb-4"
+            className="flex flex-col max-w-[290px] mx-auto pb-5"
           >
             <input
               disabled={loading && true}
@@ -184,7 +188,7 @@ const Main = () => {
             <button
               disabled={loading}
               type="submit"
-              className={`cursor-pointer mt-4 border-2 border-[#222222] text-[#222222] hover:bg-[#222222] hover:text-white px-2 py-3 transition ${
+              className={`flex justify-center items-center gap-1 cursor-pointer mt-6 border-2 border-[#222222] bg-[#222222] hover:bg-[#333333] text-white px-2 py-3 transition ${
                 loading
                   ? "!cursor-not-allowed opacity-70"
                   : error
@@ -192,13 +196,22 @@ const Main = () => {
                   : ""
               }`}
             >
-              {loading ? "Loading..." : error ? "Retry" : "Generate"}
+              {loading ? (
+                "Loading..."
+              ) : error ? (
+                "Retry"
+              ) : (
+                <>
+                  Generate
+                  <StarsIcon className="fill-current mt-[-3px]" />
+                </>
+              )}
             </button>
           </form>
           <button
             onClick={() => exportAsImage(exportRef.current, "profile")}
             disabled={loading || !user || !lastUser || (error && true)}
-            className={`flex justify-center items-center gap-1 w-full max-w-[290px] mx-auto cursor-pointer border-2 border-[#222222] text-[#222222] hover:bg-[#222222] hover:text-white px-2 py-3 transition ${
+            className={`flex justify-center items-center gap-1 w-full max-w-[290px] mx-auto cursor-pointer border-2 border-[#333333] text-[#333333] hover:bg-[#333333] hover:text-white px-2 py-3 transition ${
               loading || error || !user || !lastUser
                 ? "!cursor-not-allowed opacity-70"
                 : ""
@@ -208,7 +221,7 @@ const Main = () => {
               "Loading..."
             ) : (
               <>
-                Download <DownloadIcon className="fill-current" />
+                Download <DownloadIcon className="fill-current mt-[-3px]" />
               </>
             )}
           </button>
