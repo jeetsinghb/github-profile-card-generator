@@ -26,14 +26,30 @@ const Main = () => {
         if (res.status === 404) {
           toast.error("Enter a valid username", {
             position: "top-center",
+            style: {
+              fontSize: "0.9rem",
+              fontWeight: 400,
+            },
           });
           throw new Error(
             "User not found, please try again with a valid username"
           );
         } else if (res.status === 403) {
-          toast.error("Oops, too many requets. Please try again later");
+          toast.error("Oops, too many requets. Please try again later", {
+            position: "top-center",
+            style: {
+              fontSize: "0.9rem",
+              fontWeight: 400,
+            },
+          });
         }
-        toast.error("Oops, try again or try again later...");
+        toast.error("Oops, try again or try again later...", {
+          position: "top-center",
+          style: {
+            fontSize: "0.9rem",
+            fontWeight: 400,
+          },
+        });
         throw new Error("Oops, something went wrong... Try again");
       }
 
@@ -42,6 +58,10 @@ const Main = () => {
       setLastUser(user);
       toast.success("Success!", {
         position: "top-center",
+        style: {
+          fontSize: "0.9rem",
+          fontWeight: 400,
+        },
       });
     } catch (error) {
       setError(error.message);
@@ -56,6 +76,10 @@ const Main = () => {
     if (!user.trim()) {
       toast.error("Field is required", {
         position: "top-center",
+        style: {
+          fontSize: "0.9rem",
+          fontWeight: 400,
+        },
       });
       return;
     }
@@ -63,6 +87,10 @@ const Main = () => {
       toast("Hey! You're already viewing this profile.", {
         icon: "👀",
         position: "top-center",
+        style: {
+          fontSize: "0.9rem",
+          fontWeight: 400,
+        },
       });
       return;
     }
@@ -154,10 +182,14 @@ const Main = () => {
               autoComplete="off"
             />
             <button
-              disabled={loading && true}
+              disabled={loading}
               type="submit"
               className={`cursor-pointer mt-4 border-2 border-[#222222] text-[#222222] hover:bg-[#222222] hover:text-white px-2 py-3 transition ${
-                loading ? "!cursor-not-allowed opacity-70" : ""
+                loading
+                  ? "!cursor-not-allowed opacity-70"
+                  : error
+                  ? "bg-red-700 border-white text-white"
+                  : ""
               }`}
             >
               {loading ? "Loading..." : error ? "Retry" : "Generate"}
