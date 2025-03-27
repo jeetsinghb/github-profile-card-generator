@@ -178,7 +178,7 @@ const Main = () => {
               type="text"
               name="user"
               value={user}
-              onChange={(e) => setUser(e.target.value.trim())}
+              onChange={(e) => setUser(e.target.value.trim().toLowerCase())}
               className={`border-b border-[#333333] text-center p-1 focus:outline-0 placeholder:text-[1rem] placeholder:opacity-80 ${
                 loading ? "!cursor-not-allowed opacity-70" : ""
               }`}
