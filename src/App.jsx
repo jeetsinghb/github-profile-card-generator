@@ -1,6 +1,7 @@
 import { createContext, useState } from "react";
 import Header from "./components/Header";
 import Main from "./components/Main";
+import Footer from "./components/Footer";
 
 export const ThemeContext = createContext();
 
@@ -17,6 +18,7 @@ const App = () => {
         <Header />
         <Main />
       </ThemeContext.Provider>
+      <Footer />
     </>
   );
 };

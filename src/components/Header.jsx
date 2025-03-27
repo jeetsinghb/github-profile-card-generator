@@ -1,5 +1,7 @@
 import { useContext } from "react";
 import { ThemeContext } from "../App";
+import { LightIcon } from "../icons/LightIcon";
+import { DarkIcon } from "../icons/DarkIcon";
 
 const Header = () => {
   const { theme, themeSwitcher } = useContext(ThemeContext);
@@ -10,7 +12,9 @@ const Header = () => {
         <h1 className="text-center text-[1.1rem]">
           Github Profile Card Generator
         </h1>
-        <button onClick={themeSwitcher}>{theme ? "dark" : "light"}</button>
+        <button className="cursor-pointer" onClick={themeSwitcher}>
+          {theme ? <DarkIcon /> : <LightIcon />}
+        </button>
       </div>
     </header>
   );

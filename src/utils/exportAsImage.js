@@ -6,7 +6,7 @@ const exportAsImage = async (el, imageFileName) => {
     const canvas = await html2canvas(el, {
       useCORS: true,
       logging: true, // optional, useful for debugging
-      scale: 2, // Increase the scale for better resolution
+      scale: 3, // Increase the scale for better resolution
     });
 
     // Create an image from the canvas with a high-quality resolution
@@ -29,6 +29,7 @@ const downloadImage = (blob, fileName) => {
   document.body.removeChild(fakeLink);
 
   fakeLink.remove();
+  console.clear();
 };
 
 export default exportAsImage;
