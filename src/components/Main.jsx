@@ -4,12 +4,10 @@ import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import exportAsImage from "../utils/exportAsImage";
 import { DownloadIcon } from "../icons/DownloadIcon";
-import { ThemeContext } from "../App";
 import StarsIcon from "../icons/StarsIcon";
+import RetryIcon from "../icons/RetryIcon";
 
 const Main = () => {
-  const { theme } = useContext(ThemeContext);
-
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -25,39 +23,41 @@ const Main = () => {
       const res = await fetch(`https://api.github.com/users/${user}`);
       if (!res.ok) {
         if (res.status === 404) {
-          toast.error("Enter a valid username", {
-            position: "top-center",
-            style: {
-              fontSize: "0.9rem",
-              fontWeight: 400,
-            },
-          });
-          throw new Error(
-            "User not found, please try again with a valid username"
+          toast.error(
+            "Username not found. Please enter a valid GitHub username.",
+            {
+              position: "top-center",
+              style: {
+                fontSize: "0.9rem",
+                fontWeight: 400,
+              },
+            }
           );
+          throw new Error("User not found");
         } else if (res.status === 403) {
-          toast.error("Oops, too many requets. Please try again later", {
+          toast.error("Rate limit exceeded. Please wait and try again later.", {
             position: "top-center",
             style: {
               fontSize: "0.9rem",
               fontWeight: 400,
             },
           });
+          throw new Error("Rate limit exceeded");
         }
-        toast.error("Oops, try again or try again later...", {
+        toast.error("Something went wrong. Please try again later.", {
           position: "top-center",
           style: {
             fontSize: "0.9rem",
             fontWeight: 400,
           },
         });
-        throw new Error("Oops, something went wrong... Try again");
+        throw new Error("Error: Something went wrong");
       }
 
       const data = await res.json();
       setProfile(data);
       setLastUser(user);
-      toast.success("Success!", {
+      toast.success("Profile loaded successfully!", {
         position: "top-center",
         style: {
           fontSize: "0.9rem",
@@ -74,8 +74,11 @@ const Main = () => {
 
   function handleSubmit(e) {
     e.preventDefault();
+
+    const usernameRegex = /^[a-zA-Z0-9-]{1,39}$/;
+
     if (!user.trim()) {
-      toast.error("Field is required", {
+      toast.error("Username is required", {
         position: "top-center",
         style: {
           fontSize: "0.9rem",
@@ -84,6 +87,18 @@ const Main = () => {
       });
       return;
     }
+
+    if (!usernameRegex.test(user)) {
+      toast.error(
+        "Invalid username. Usernames can only contain letters, numbers, and hyphens (-).",
+        {
+          position: "top-center",
+          style: { fontSize: "0.9rem", fontWeight: 400 },
+        }
+      );
+      return;
+    }
+
     if (user === lastUser) {
       toast("Hey! You're already viewing this profile.", {
         icon: "👀",
@@ -95,6 +110,7 @@ const Main = () => {
       });
       return;
     }
+
     fetchProfile();
   }
 
@@ -109,9 +125,7 @@ const Main = () => {
       <div className="container px-4 mx-auto flex flex-col md:flex-row items-center gap-y-6">
         <div className="w-full px-4">
           <div
-            className={`g_card max-w-[290px] mx-auto rounded-2xl overflow-hidden ${
-              theme ? "card__dark bg-[#282828]" : "bg-[#ffffff]"
-            }`}
+            className="g_card max-w-[290px] mx-auto rounded-2xl overflow-hidden"
             ref={exportRef}
           >
             <div className="g_card_top text-center p-8">
@@ -121,7 +135,7 @@ const Main = () => {
                 ) : (
                   profile?.avatar_url && (
                     <img
-                      loading="eager"
+                      loading="lazy"
                       src={profile?.avatar_url}
                       alt={profile?.name || "Profile Image"}
                       width="120"
@@ -179,27 +193,31 @@ const Main = () => {
               name="user"
               value={user}
               onChange={(e) => setUser(e.target.value.trim().toLowerCase())}
-              className={`border-b border-[#333333] text-center p-1 focus:outline-0 placeholder:text-[1rem] placeholder:opacity-80 ${
-                loading ? "!cursor-not-allowed opacity-70" : ""
-              }`}
-              placeholder="Enter github username"
+              className="border-b input text-center p-1 focus:outline-0"
+              placeholder="Enter GitHub username"
               autoComplete="off"
+              aria-label="Enter GitHub username"
+              autoFocus
             />
             <button
               disabled={loading}
+              aria-label="Generate profile card"
               type="submit"
-              className={`flex justify-center items-center gap-1 cursor-pointer mt-6 border-2 border-[#222222] bg-[#222222] hover:bg-[#333333] text-white px-2 py-3 transition ${
+              className={`btn-filled flex justify-center items-center gap-1 mt-6 border-2 border-[#222222] bg-[#222222] hover:bg-[#333333] text-white px-2 py-3 transition ${
                 loading
                   ? "!cursor-not-allowed opacity-70"
                   : error
-                  ? "bg-red-700 border-white text-white"
+                  ? "bg-red-700 border-white text-white hover:bg-red-600 btn-filled-error"
                   : ""
               }`}
             >
               {loading ? (
                 "Loading..."
               ) : error ? (
-                "Retry"
+                <>
+                  Retry
+                  <RetryIcon />
+                </>
               ) : (
                 <>
                   Generate
@@ -211,14 +229,15 @@ const Main = () => {
           <button
             onClick={() => exportAsImage(exportRef.current, "profile")}
             disabled={loading || !user || !lastUser || (error && true)}
-            className={`flex justify-center items-center gap-1 w-full max-w-[290px] mx-auto cursor-pointer border-2 border-[#333333] text-[#333333] hover:bg-[#333333] hover:text-white px-2 py-3 transition ${
+            aria-label="Download profile card"
+            className={`btn-outlined flex justify-center items-center gap-1 w-full max-w-[290px] mx-auto border-2 border-[#333333] text-[#333333] hover:bg-[#333333] hover:text-white px-2 py-3 transition ${
               loading || error || !user || !lastUser
                 ? "!cursor-not-allowed opacity-70"
                 : ""
             }`}
           >
             {loading ? (
-              "Loading..."
+              "Processing..."
             ) : (
               <>
                 Download <DownloadIcon className="fill-current mt-[-3px]" />

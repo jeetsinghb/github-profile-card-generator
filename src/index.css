@@ -1,19 +1,37 @@
 @import "tailwindcss";
 
+:root {
+  --bg-color-white-primary: #ffffff;
+  --text-color-dark-primary: #1c1c1c;
+  --bg-color-dark-primary: #1c1c1c;
+  --text-color-white-prmary: #ffffff;
+  --bg-color-dark-secondary: #222222;
+  --bg-color-dark-ternary: #282828;
+  --text-label-primary: #6c6a6a;
+}
 html,
 body,
 #root {
   height: 100%;
 }
 body {
-  background-color: #ffffff;
-  color: #1c1c1c;
+  background-color: var(--bg-color-white-primary);
+  color: var(--text-color-dark-primary);
   font-family: "Winky Sans", sans-serif;
   font-optical-sizing: auto;
   font-weight: 500;
   font-style: normal;
 }
+body.dark-mode {
+  background-color: var(--text-color-dark-primary);
+  color: var(--text-color-white-prmary);
+}
+button,
+input[type="submit"] {
+  cursor: pointer;
+}
 header {
+  background-color: var(--bg-color-white-primary);
   -webkit-box-shadow: rgba(0, 0, 0, 0.04) 0px 3px 5px;
   box-shadow: rgba(0, 0, 0, 0.04) 0px 3px 5px;
   position: fixed;
@@ -21,6 +39,17 @@ header {
   left: 0;
   right: 0;
   z-index: 1;
+}
+body.dark-mode header {
+  background-color: var(--bg-color-dark-secondary);
+}
+svg {
+  fill: var(--text-color-dark-primary);
+}
+body.dark-mode svg,
+.btn-filled svg,
+.btn-outlined:hover svg {
+  fill: var(--text-color-white-prmary);
 }
 main {
   height: 100%;
@@ -36,8 +65,12 @@ main {
   justify-content: center;
 }
 .g_card {
+  background-color: var(--bg-color-white-primary);
   -webkit-box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+}
+body.dark-mode .g_card {
+  background-color: var(--bg-color-dark-ternary);
 }
 .g_profile {
   -webkit-box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px,
@@ -54,17 +87,47 @@ ul li span {
 .card__dark h4,
 .card__dark p,
 .card__dark ul li {
-  color: #fff;
+  color: var(--text-color-white-prmary);
 }
 .card__dark h3,
 .card__dark ul li span {
-  color: #fff;
+  color: var(--text-color-white-prmary);
   opacity: 0.9;
 }
 .label {
-  color: #6c6a6a;
-  font-size: 0.90rem;
-  opacity: 0.7;
+  color: var(--text-color-dark-primary);
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+body.dark-mode .label {
+  color: var(--text-color-white-prmary);
+  opacity: 1;
+}
+.input {
+  border-color: #333333;
+}
+body.dark-mode .input {
+  border-color: var(--bg-color-white-primary);
+}
+body.dark-mode .btn-filled:not(.btn-filled-error) {
+  border-color: var(--bg-color-white-primary);
+  background-color: var(--bg-color-white-primary);
+  color: var(--text-color-dark-primary);
+}
+body.dark-mode .btn-filled:not(.btn-filled-error) svg {
+  fill: var(--text-color-dark-primary);
+}
+body.dark-mode .btn-filled:hover {
+  opacity: 0.9;
+}
+body.dark-mode .btn-outlined {
+  color: var(--bg-color-white-primary);
+  background-color: #333333;
+  border-color: #333333;
+}
+body.dark-mode .btn-outlined:hover {
+  border-color: #f3f3f3;
+  background-color: var(--bg-color-dark-secondary);
 }
 footer {
   position: fixed;

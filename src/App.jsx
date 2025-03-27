@@ -1,4 +1,4 @@
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import Header from "./components/Header";
 import Main from "./components/Main";
 import Footer from "./components/Footer";
@@ -11,6 +11,16 @@ const App = () => {
   function themeSwitcher() {
     setTheme((prevState) => !prevState);
   }
+
+  useEffect(() => {
+    if (theme) {
+      document.body.classList.add("dark-mode");
+      document.body.classList.remove("light-mode");
+    } else {
+      document.body.classList.add("light-mode");
+      document.body.classList.remove("dark-mode");
+    }
+  }, [theme]);
 
   return (
     <>
