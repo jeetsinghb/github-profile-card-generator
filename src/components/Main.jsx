@@ -1,14 +1,21 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import exportAsImage from "../utils/exportAsImage";
+import { DownloadIcon } from "../icons/DownloadIcon";
+import { ThemeContext } from "../App";
 
 const Main = () => {
+  const { theme } = useContext(ThemeContext);
+
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [user, setUser] = useState("jeetsinghb");
   const [lastUser, setLastUser] = useState(null);
+
+  const exportRef = useRef();
 
   const fetchProfile = async () => {
     try {
@@ -23,12 +30,14 @@ const Main = () => {
           throw new Error(
             "User not found, please try again with a valid username"
           );
+        } else if (res.status === 403) {
+          toast.error("Oops, too many requets. Please try again later");
         }
         toast.error("Oops, try again or try again later...");
         throw new Error("Oops, something went wrong... Try again");
       }
+
       const data = await res.json();
-      console.log(data);
       setProfile(data);
       setLastUser(user);
       toast.success("Success!", {
@@ -36,6 +45,7 @@ const Main = () => {
       });
     } catch (error) {
       setError(error.message);
+      setLastUser(null);
     } finally {
       setLoading(false);
     }
@@ -69,8 +79,13 @@ const Main = () => {
     <main className="py-12 max-w-[650px] mx-auto">
       <div className="container px-4 mx-auto flex flex-col md:flex-row items-center gap-y-6">
         <div className="w-full px-4">
-          <div className="g_card max-w-[290px] mx-auto bg-[#ffffff] rounded-2xl">
-            <div className="g_card_top text-center p-8 pb-0">
+          <div
+            className={`g_card max-w-[290px] mx-auto rounded-2xl overflow-hidden ${
+              theme ? "card__dark bg-[#282828]" : "bg-[#ffffff]"
+            }`}
+            ref={exportRef}
+          >
+            <div className="g_card_top text-center p-8">
               <div className="g_card_profile w-[120px] h-[120px] mx-auto mb-5">
                 {loading || error ? (
                   <Skeleton circle height="100%" />
@@ -104,7 +119,7 @@ const Main = () => {
               ) : (
                 <p className="text-sm">{profile?.bio}</p>
               )}
-              <ul className="flex justify-between border-t border-[#f3f3f3] py-4 px-2 mt-5">
+              <ul className="flex justify-between border-t border-[#f3f3f3] pt-4 px-2 mt-5">
                 <li className="text-sm">
                   <span className="block mb-1">Followers</span>
                   {loading || error ? <Skeleton /> : profile?.followers || 0}
@@ -127,36 +142,38 @@ const Main = () => {
             className="flex flex-col max-w-[290px] mx-auto pb-4"
           >
             <input
+              disabled={loading && true}
               type="text"
               name="user"
               value={user}
               onChange={(e) => setUser(e.target.value.trim())}
               className={`border-b border-[#333333] text-center p-1 focus:outline-0 placeholder:text-[1rem] placeholder:opacity-80 ${
-                loading && "!cursor-not-allowed opacity-70"
+                loading ? "!cursor-not-allowed opacity-70" : ""
               }`}
               placeholder="Enter github username"
               autoComplete="off"
-              disabled={loading && true}
             />
             <button
               disabled={loading && true}
               type="submit"
               className={`cursor-pointer mt-4 border-2 border-[#222222] text-[#222222] hover:bg-[#222222] hover:text-white px-2 py-3 transition ${
-                loading && "!cursor-not-allowed opacity-70"
+                loading ? "!cursor-not-allowed opacity-70" : ""
               }`}
             >
               Generate
             </button>
           </form>
-          {/* Add the Download Button */}
-          {/* <button
-            disabled={loading || (error && true)}
-            className={`w-full max-w-[290px] cursor-pointer border-2 border-[#222222] text-[#222222] hover:bg-[#222222] hover:text-white px-2 py-3 transition ${
-              loading || (error && "!cursor-not-allowed opacity-70")
+          <button
+            onClick={() => exportAsImage(exportRef.current, "profile")}
+            disabled={loading || !user || !lastUser || (error && true)}
+            className={`flex justify-center items-center gap-1 w-full max-w-[290px] cursor-pointer border-2 border-[#222222] text-[#222222] hover:bg-[#222222] hover:text-white px-2 py-3 transition ${
+              loading || error || !user || !lastUser
+                ? "!cursor-not-allowed opacity-70"
+                : ""
             }`}
           >
-            Download as PNG
-          </button> */}
+            Download <DownloadIcon className="fill-current" />
+          </button>
         </div>
       </div>
     </main>
