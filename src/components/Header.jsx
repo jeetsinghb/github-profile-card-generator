@@ -7,10 +7,10 @@ const Header = () => {
   const { theme, themeSwitcher } = useContext(ThemeContext);
 
   return (
-    <header className="bg-[#ffffff] py-3">
+    <header className="bg-[#ffffff] py-3 border-b border-[#f3f3f3]">
       <div className="container px-4 mx-auto flex justify-between items-center">
         <h1 className="text-center text-[1.1rem]">
-          Github Profile Card Generator
+          Github Profile Card Maker
         </h1>
         <button className="cursor-pointer" onClick={themeSwitcher}>
           {theme ? <DarkIcon /> : <LightIcon />}

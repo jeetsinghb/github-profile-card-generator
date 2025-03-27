@@ -2,7 +2,7 @@ const Footer = () => {
   return (
     <footer className="bg-[#222222] py-3 text-center">
       <div className="container px-4 mx-auto">
-        <p className="font-light text-sm text-white">
+        <p className="font-light text-medium text-white">
           Built with ❤️ by{" "}
           <a
             href="https://github.com/jeetsinghb"

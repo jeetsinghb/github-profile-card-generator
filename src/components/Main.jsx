@@ -25,7 +25,7 @@ const Main = () => {
       if (!res.ok) {
         if (res.status === 404) {
           toast.error("Enter a valid username", {
-            position: "bottom-center",
+            position: "top-center",
           });
           throw new Error(
             "User not found, please try again with a valid username"
@@ -41,7 +41,7 @@ const Main = () => {
       setProfile(data);
       setLastUser(user);
       toast.success("Success!", {
-        position: "bottom-center",
+        position: "top-center",
       });
     } catch (error) {
       setError(error.message);
@@ -55,14 +55,14 @@ const Main = () => {
     e.preventDefault();
     if (!user.trim()) {
       toast.error("Field is required", {
-        position: "bottom-center",
+        position: "top-center",
       });
       return;
     }
     if (user === lastUser) {
       toast("Hey! You're already viewing this profile.", {
         icon: "👀",
-        position: "bottom-center",
+        position: "top-center",
       });
       return;
     }
@@ -160,19 +160,25 @@ const Main = () => {
                 loading ? "!cursor-not-allowed opacity-70" : ""
               }`}
             >
-              Generate
+              {loading ? "Loading..." : error ? "Retry" : "Generate"}
             </button>
           </form>
           <button
             onClick={() => exportAsImage(exportRef.current, "profile")}
             disabled={loading || !user || !lastUser || (error && true)}
-            className={`flex justify-center items-center gap-1 w-full max-w-[290px] cursor-pointer border-2 border-[#222222] text-[#222222] hover:bg-[#222222] hover:text-white px-2 py-3 transition ${
+            className={`flex justify-center items-center gap-1 w-full max-w-[290px] mx-auto cursor-pointer border-2 border-[#222222] text-[#222222] hover:bg-[#222222] hover:text-white px-2 py-3 transition ${
               loading || error || !user || !lastUser
                 ? "!cursor-not-allowed opacity-70"
                 : ""
             }`}
           >
-            Download <DownloadIcon className="fill-current" />
+            {loading ? (
+              "Loading..."
+            ) : (
+              <>
+                Download <DownloadIcon className="fill-current" />
+              </>
+            )}
           </button>
         </div>
       </div>
